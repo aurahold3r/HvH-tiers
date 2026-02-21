@@ -1,0 +1,50 @@
+{
+  "lastUpdated": "2026-02-21",
+  "stats": {
+    "totalTests": 1250,
+    "activePlayers": 342,
+    "totalTesters": 28,
+    "weeklyTests": 145
+  },
+  "players": [
+    {
+      "uuid": "player-uuid-1",
+      "username": "Technoblade",
+      "tiers": {
+        "crystal": "HT5",
+        "beast": "HT4",
+        "diapot": "LT3",
+        "nethpot": "HT3",
+        "mace": "LT4",
+        "uhc": "HT2",
+        "sword": "LT5"
+      }
+    },
+    {
+      "uuid": "player-uuid-2",
+      "username": "Dream",
+      "tiers": {
+        "crystal": "LT2",
+        "beast": "HT3",
+        "diapot": "HT4",
+        "nethpot": "LT5",
+        "mace": "HT1",
+        "uhc": "LT3",
+        "sword": "HT4"
+      }
+    },
+    {
+      "uuid": "player-uuid-3",
+      "username": "Sapnap",
+      "tiers": {
+        "crystal": "HT3",
+        "beast": "LT4",
+        "diapot": "LT2",
+        "nethpot": "HT5",
+        "mace": "LT1",
+        "uhc": "HT4",
+        "sword": "HT2"
+      }
+    }
+  ]
+}

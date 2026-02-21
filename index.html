@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Tier Testing Leaderboard</title>
+    <link rel="stylesheet" href="src/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <h1>Tier Testing Leaderboard</h1>
+      <div id="lastUpdated" class="muted"></div>
+    </header>
+
+    <main class="container">
+      <section class="stats" id="stats">
+        <!-- stats injected here -->
+      </section>
+
+      <section class="controls">
+        <input id="search" placeholder="Search username" />
+        <label>Sort:
+          <select id="sortSelect">
+            <option value="username">Username</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="table-wrap">
+        <table id="playersTable">
+          <thead id="tableHead"></thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <small>Data loaded from <code>data/results.json</code></small>
+    </footer>
+
+    <script src="src/app.js"></script>
+  </body>
+</html>
