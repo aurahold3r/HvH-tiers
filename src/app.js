@@ -1,7 +1,11 @@
 // Configuration
 const DATA_FILE = 'data/results.json';
-const TIER_RANKS = ['HT5', 'HT4', 'HT3', 'HT2', 'HT1', 'LT5', 'LT4', 'LT3', 'LT2', 'LT1'];
+const TIER_RANKS = ['HT1', 'LT1', 'HT2', 'LT2', 'HT3', 'LT3', 'HT4', 'LT4', 'HT5', 'LT5'];
 const GAMEMODES = ['crystal', 'beast', 'diapot', 'nethpot', 'mace', 'uhc', 'sword'];
+const TIER_POINTS = {
+  'HT1': 50, 'LT1': 45, 'HT2': 40, 'LT2': 35, 'HT3': 30, 'LT3': 25,
+  'HT4': 20, 'LT4': 15, 'HT5': 10, 'LT5': 5
+};
 const GAMEMODE_EMOJIS = {
   overall: '📊',
   crystal: '🔮',
@@ -29,16 +33,18 @@ async function loadData() {
   }
 }
 
-// Calculate points for a player
+// Get points for a single tier
+function getTierPoints(tier) {
+  return TIER_POINTS[tier] || 0;
+}
+
+// Calculate total points for a player
 function calculatePlayerPoints(tiers) {
   let points = 0;
   for (const gamemode of GAMEMODES) {
     const tier = tiers[gamemode];
-    if (!tier) continue;
-    if (tier.startsWith('HT')) {
-      points += 10;
-    } else if (tier.startsWith('LT')) {
-      points += 5;
+    if (tier) {
+      points += getTierPoints(tier);
     }
   }
   return points;
@@ -157,6 +163,7 @@ function renderTable(players) {
       <th style="width: 50px;">Rank</th>
       <th>Player</th>
       <th>Tier</th>
+      <th>Points</th>
     `;
   }
 
@@ -187,9 +194,12 @@ function renderTable(players) {
       const points = calculatePlayerPoints(tiers);
       rowHtml += `<td class="points-cell">${points}</td>`;
     } else {
-      const tier = (player.tiers || {})[currentGamemode] || 'Untested';
+      const tiers = player.tiers || {};
+      const tier = tiers[currentGamemode] || 'Untested';
       const tierClass = tier === 'Untested' ? 'tier-empty' : (tier.startsWith('HT') ? 'tier-ht' : 'tier-lt');
       rowHtml += `<td><span class="tier-badge ${tierClass}">${tier}</span></td>`;
+      const totalPoints = calculatePlayerPoints(tiers);
+      rowHtml += `<td class="points-cell">${totalPoints}</td>`;
     }
 
     row.innerHTML = rowHtml;
