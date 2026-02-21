@@ -184,7 +184,7 @@ html, body {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
-  table-layout: fixed;
+  table-layout: auto;
 }
 
 .leaderboard-table thead {
@@ -508,24 +508,56 @@ html, body {
 
   .table-wrap {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .leaderboard-table {
-    font-size: 12px;
+    font-size: 11px;
+    table-layout: auto;
+    min-width: 600px;
   }
 
   .leaderboard-table th,
   .leaderboard-table td {
-    padding: 10px 8px;
+    padding: 10px 6px;
+  }
+
+  .rank-cell {
+    width: 40px;
+    font-size: 14px;
+  }
+
+  .player-td {
+    padding: 10px 6px;
   }
 
   .player-cell {
     gap: 8px;
+    flex-wrap: nowrap;
   }
 
   .player-avatar {
     width: 28px;
     height: 28px;
+    flex-shrink: 0;
+  }
+
+  .player-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px;
+  }
+
+  .tier-badge {
+    min-width: 45px;
+    padding: 3px 6px;
+    font-size: 11px;
+  }
+
+  .points-cell {
+    min-width: 60px;
+    text-align: center;
   }
 
   .modal-body {
@@ -541,5 +573,57 @@ html, body {
 
   .search-input {
     max-width: 100%;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+  .rank-cell {
+    width: 35px;
+    font-size: 13px;
+    padding: 8px 4px;
+  }
+
+  .player-name {
+    max-width: 70px;
+    font-size: 12px;
+  }
+
+  .player-avatar {
+    width: 24px;
+    height: 24px;
+  }
+
+  .tier-badge {
+    min-width: 40px;
+    padding: 2px 4px;
+    font-size: 10px;
+  }
+
+  .points-cell {
+    min-width: 50px;
+    font-size: 11px;
+  }
+
+  .leaderboard-table th,
+  .leaderboard-table td {
+    padding: 8px 4px;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .stats-container {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .stat-card {
+    padding: 16px;
+  }
+
+  .stat-value {
+    font-size: 24px;
   }
 }
