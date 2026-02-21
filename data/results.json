@@ -8,7 +8,7 @@
   },
   "players": [
     {
-      "uuid": "99066e4fd66f42009cff939448e0657b",
+      "uuid": "d7b8c9f1-2e4a-4b5c-8d6e-9f0a1b2c3d4e",
       "username": "Technoblade",
       "tiers": {
         "crystal": "HT5",
@@ -21,7 +21,7 @@
       }
     },
     {
-      "uuid": "e0af8068373f1853f22f1697b725a2bc",
+      "uuid": "a1b2c3d4-e5f6-4a5b-9c8d-7e6f5a4b3c2d",
       "username": "Dream",
       "tiers": {
         "crystal": "HT4",
@@ -34,7 +34,7 @@
       }
     },
     {
-      "uuid": "72ad9a7c26fbde4f4f4c8f7f7d3f8e5c",
+      "uuid": "f1e2d3c4-b5a6-7890-1234-567890123456",
       "username": "Sapnap",
       "tiers": {
         "crystal": "HT3",
@@ -47,29 +47,94 @@
       }
     },
     {
-      "uuid": "2a37f35a40a65c28f37903e73c4e6af1",
-      "username": "NotFound",
+      "uuid": "90123456-7abc-def0-1234-567890abcdef",
+      "username": "Punz",
       "tiers": {
-        "crystal": "HT2",
-        "beast": "HT2",
-        "diapot": "HT5",
-        "nethpot": "LT1",
+        "crystal": "HT5",
+        "beast": "HT5",
+        "diapot": "HT3",
+        "nethpot": "HT4",
         "mace": "HT5",
         "uhc": "HT3",
+        "sword": "HT4"
+      }
+    },
+    {
+      "uuid": "abcdef01-2345-6789-abcd-ef0123456789",
+      "username": "Quig",
+      "tiers": {
+        "crystal": "HT4",
+        "beast": "HT4",
+        "diapot": "HT5",
+        "nethpot": "HT2",
+        "mace": "LT3",
+        "uhc": "HT5",
+        "sword": "HT3"
+      }
+    },
+    {
+      "uuid": "12345678-90ab-cdef-1234-567890abcdef",
+      "username": "Karl",
+      "tiers": {
+        "crystal": "LT2",
+        "beast": "LT3",
+        "diapot": "HT2",
+        "nethpot": "LT5",
+        "mace": "HT1",
+        "uhc": "LT4",
+        "sword": "LT2"
+      }
+    },
+    {
+      "uuid": "cdef1234-5678-90ab-cdef-1234567890ab",
+      "username": "Illumina",
+      "tiers": {
+        "crystal": "HT3",
+        "beast": "HT3",
+        "diapot": "HT4",
+        "nethpot": "HT3",
+        "mace": "HT4",
+        "uhc": "HT2",
         "sword": "HT5"
       }
     },
     {
-      "uuid": "8667ba71b358a38ee40265a6a2e6c789",
+      "uuid": "56789abc-def0-1234-5678-9abcdef01234",
       "username": "GeorgeNotFound",
       "tiers": {
-        "crystal": "LT5",
-        "beast": "HT1",
+        "crystal": "LT4",
+        "beast": "HT2",
+        "diapot": "LT5",
+        "nethpot": "LT3",
+        "mace": "LT5",
+        "uhc": "LT3",
+        "sword": "LT4"
+      }
+    },
+    {
+      "uuid": "9abcdef0-1234-5678-9abc-def012345678",
+      "username": "Wisp",
+      "tiers": {
+        "crystal": "HT5",
+        "beast": "LT2",
+        "diapot": "HT2",
+        "nethpot": "HT5",
+        "mace": "HT3",
+        "uhc": "HT4",
+        "sword": "HT2"
+      }
+    },
+    {
+      "uuid": "def01234-5678-9abc-def0-12345678abcd",
+      "username": "Fruitberries",
+      "tiers": {
+        "crystal": "HT4",
+        "beast": "HT4",
         "diapot": "HT3",
-        "nethpot": "HT2",
+        "nethpot": "HT4",
         "mace": "LT2",
-        "uhc": "HT1",
-        "sword": "LT3"
+        "uhc": "HT3",
+        "sword": "HT4"
       }
     }
   ]

@@ -1,65 +1,87 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Minecraft Tier Testing Leaderboard</title>
-    <link rel="stylesheet" href="src/style.css" />
-  </head>
-  <body>
-    <header class="site-header">
-      <div class="header-content">
-        <h1>⚔️ Tier Testing Leaderboard</h1>
-        <div id="lastUpdated" class="muted"></div>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Minecraft Tier Testing - Leaderboard</title>
+  <link rel="stylesheet" href="src/style.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-content">
+      <h1 class="logo">⚔️ Tier Testing</h1>
+      <div id="lastUpdated" class="last-updated"></div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+    <!-- Stats Cards -->
+    <section class="stats-container" id="stats"></section>
+
+    <!-- Gamemode Tabs -->
+    <section class="tabs-section">
+      <div class="tabs" id="tabs">
+        <button class="tab-btn active" data-gamemode="overall">📊 Overall</button>
+        <button class="tab-btn" data-gamemode="crystal">🔮 Crystal</button>
+        <button class="tab-btn" data-gamemode="beast">👹 Beast</button>
+        <button class="tab-btn" data-gamemode="diapot">💎 DiaPot</button>
+        <button class="tab-btn" data-gamemode="nethpot">🌋 NethPot</button>
+        <button class="tab-btn" data-gamemode="mace">🔨 Mace</button>
+        <button class="tab-btn" data-gamemode="uhc">⚔️ UHC</button>
+        <button class="tab-btn" data-gamemode="sword">🗡️ Sword</button>
       </div>
-    </header>
+    </section>
 
-    <main class="container">
-      <!-- Stats Cards -->
-      <section class="stats" id="stats">
-        <!-- stats injected here -->
-      </section>
+    <!-- Search Bar -->
+    <section class="search-section">
+      <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search player...">
+    </section>
 
-      <!-- Gamemode Tabs -->
-      <section class="gamemode-tabs">
-        <div class="tabs" id="gamemodeTabs">
-          <!-- tabs injected here -->
+    <!-- Leaderboard Table -->
+    <section class="table-wrap">
+      <table class="leaderboard-table">
+        <thead>
+          <tr id="tableHeader"></tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </section>
+
+    <div id="emptyState" class="empty-state" style="display:none;">
+      <p>No players found in this category.</p>
+    </div>
+  </main>
+
+  <!-- Player Modal -->
+  <div id="playerModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close">&times;</button>
+      <div class="modal-body">
+        <div class="modal-skin">
+          <img id="modalSkinImage" src="" alt="Player Skin" />
         </div>
-      </section>
-
-      <!-- Leaderboard Table -->
-      <section class="table-wrap">
-        <table id="leaderboardTable">
-          <thead id="tableHead"></thead>
-          <tbody id="tableBody"></tbody>
-        </table>
-      </section>
-    </main>
-
-    <!-- Player Modal -->
-    <div id="playerModal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <div class="modal-body">
-          <div class="modal-left">
-            <img id="modalSkin" src="" alt="player skin" />
-          </div>
-          <div class="modal-right">
-            <h2 id="modalUsername"></h2>
-            <p class="modal-uuid" id="modalUUID"></p>
+        <div class="modal-info">
+          <h2 id="modalUsername"></h2>
+          <p class="modal-uuid" id="modalUUID"></p>
+          <div class="modal-stats">
+            <h3>Tier Ranks</h3>
             <div class="modal-tiers" id="modalTiers"></div>
             <div class="modal-points">
-              <strong>Total Points: <span id="modalPoints">0</span></strong>
+              <strong>Total Points: <span id="modalTotalPoints">0</span></strong>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <footer class="site-footer">
-      <small>Minecraft Tier Testing Leaderboard</small>
-    </footer>
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>Minecraft Tier Testing Leaderboard</p>
+  </footer>
 
-    <script src="src/app.js"></script>
-  </body>
+  <script src="src/app.js"></script>
+</body>
 </html>
