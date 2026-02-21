@@ -1,85 +1,237 @@
 const dataPath = 'data/results.json';
 
-async function loadData(){
-  const res = await fetch(dataPath, {cache: 'no-store'});
-  if(!res.ok) throw new Error('Failed to load data');
-  return res.json();
+const gamemodes = [
+  { key: 'overall', label: 'Overall', emoji: '📊' },
+  { key: 'crystal', label: 'Crystal', emoji: '🔮' },
+  { key: 'beast', label: 'Beast', emoji: '👹' },
+  { key: 'diapot', label: 'DiaPot', emoji: '💎' },
+  { key: 'nethpot', label: 'NethPot', emoji: '🌋' },
+  { key: 'mace', label: 'Mace', emoji: '🔨' },
+  { key: 'uhc', label: 'UHC', emoji: '⚔️' },
+  { key: 'sword', label: 'Sword', emoji: '🗡️' }
+];
+
+const tierOrder = ['HT5', 'HT4', 'HT3', 'HT2', 'HT1', 'LT5', 'LT4', 'LT3', 'LT2', 'LT1'];
+let allData = {};
+let allPlayers = [];
+let currentGamemode = 'overall';
+
+// Tier to points conversion
+function getTierPoints(tier) {
+  if (!tier) return 0;
+  if (tier.startsWith('HT')) return 10;
+  if (tier.startsWith('LT')) return 5;
+  return 0;
 }
 
-function renderStats(d){
+// Calculate total points for a player
+function calculateTotalPoints(player) {
+  let total = 0;
+  ['crystal', 'beast', 'diapot', 'nethpot', 'mace', 'uhc', 'sword'].forEach(gm => {
+    total += getTierPoints(player.tiers[gm]);
+  });
+  return total;
+}
+
+// Load data
+async function loadData() {
+  try {
+    const res = await fetch(dataPath, { cache: 'no-store' });
+    if (!res.ok) throw new Error('Failed to load data');
+    allData = await res.json();
+    allPlayers = (allData.players || []).map(p => ({
+      ...p,
+      totalPoints: calculateTotalPoints(p)
+    }));
+    renderStats();
+    renderGamemodeTabs();
+    renderLeaderboard('overall');
+  } catch (err) {
+    console.error(err);
+    document.getElementById('stats').innerHTML = '<p>Failed to load data.</p>';
+  }
+}
+
+// Render stats cards
+function renderStats() {
   const el = document.getElementById('stats');
   el.innerHTML = '';
-  const stats = d.stats || {};
+  const stats = allData.stats || {};
   const items = [
-    ['Total tests', stats.totalTests],
-    ['Weekly tests', stats.weeklyTests],
-    ['Active players', stats.activePlayers],
-    ['Total testers', stats.totalTesters]
+    { label: 'Total Tests', value: stats.totalTests },
+    { label: 'Active Players', value: stats.activePlayers },
+    { label: 'Total Testers', value: stats.totalTesters },
+    { label: 'Weekly Tests', value: stats.weeklyTests }
   ];
-  items.forEach(([k,v])=>{
-    const s = document.createElement('div');
-    s.className = 'stat';
-    s.innerHTML = `<div class="muted">${k}</div><div><strong>${v ?? '-'}</strong></div>`;
-    el.appendChild(s);
+  items.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'stat-card';
+    card.innerHTML = `<div class="stat-label">${item.label}</div><div class="stat-value">${item.value}</div>`;
+    el.appendChild(card);
   });
-  document.getElementById('lastUpdated').textContent = d.lastUpdated ? `Last updated: ${d.lastUpdated}` : '';
+  document.getElementById('lastUpdated').textContent = `Last updated: ${allData.lastUpdated || 'N/A'}`;
 }
 
-function makeTableColumns(players){
-  if(!players || players.length===0) return ['username'];
-  const first = players[0];
-  const tierKeys = first.tiers ? Object.keys(first.tiers) : [];
-  return ['username', ...tierKeys];
+// Render gamemode tabs
+function renderGamemodeTabs() {
+  const container = document.getElementById('gamemodeTabs');
+  container.innerHTML = '';
+  gamemodes.forEach(gm => {
+    const btn = document.createElement('button');
+    btn.className = `tab-btn ${gm.key === 'overall' ? 'active' : ''}`;
+    btn.textContent = `${gm.emoji} ${gm.label}`;
+    btn.onclick = () => switchGamemode(gm.key);
+    container.appendChild(btn);
+  });
 }
 
-function renderTable(players){
+// Switch gamemode and render leaderboard
+function switchGamemode(key) {
+  currentGamemode = key;
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  renderLeaderboard(key);
+}
+
+// Sort players by tier
+function sortByTier(players, gamemode) {
+  return players.sort((a, b) => {
+    const tierA = a.tiers[gamemode] || '';
+    const tierB = b.tiers[gamemode] || '';
+    return tierOrder.indexOf(tierA) - tierOrder.indexOf(tierB);
+  });
+}
+
+// Get players for a gamemode
+function getPlayersForGamemode(gamemode) {
+  if (gamemode === 'overall') {
+    return allPlayers.sort((a, b) => b.totalPoints - a.totalPoints);
+  }
+  const filtered = allPlayers.filter(p => p.tiers[gamemode]);
+  return sortByTier(filtered, gamemode);
+}
+
+// Render leaderboard
+function renderLeaderboard(gamemode) {
   const head = document.getElementById('tableHead');
   const body = document.getElementById('tableBody');
   head.innerHTML = '';
   body.innerHTML = '';
-  const cols = makeTableColumns(players);
-  const tr = document.createElement('tr');
-  cols.forEach(c=>{
+
+  const players = getPlayersForGamemode(gamemode);
+
+  // Build header
+  const headerRow = document.createElement('tr');
+  const headers = gamemode === 'overall'
+    ? ['Rank', 'Player', 'Crystal', 'Beast', 'DiaPot', 'NethPot', 'Mace', 'UHC', 'Sword', 'Total Points']
+    : ['Rank', 'Player', gamemode.charAt(0).toUpperCase() + gamemode.slice(1)];
+
+  headers.forEach(h => {
     const th = document.createElement('th');
-    th.textContent = c.charAt(0).toUpperCase() + c.slice(1);
-    tr.appendChild(th);
+    th.textContent = h;
+    headerRow.appendChild(th);
   });
-  head.appendChild(tr);
+  head.appendChild(headerRow);
 
-  players.forEach(p=>{
-    const r = document.createElement('tr');
-    const username = document.createElement('td');
-    username.textContent = p.username || p.uuid || '-';
-    r.appendChild(username);
-    cols.slice(1).forEach(k=>{
-      const td = document.createElement('td');
-      td.textContent = (p.tiers && p.tiers[k]) ? p.tiers[k] : '-';
-      r.appendChild(td);
-    });
-    body.appendChild(r);
+  // Build rows
+  players.forEach((p, idx) => {
+    const row = document.createElement('tr');
+    row.className = 'player-row';
+
+    // Rank
+    const rankCell = document.createElement('td');
+    rankCell.className = 'rank-cell';
+    rankCell.textContent = idx === 0 ? '👑 #1' : `#${idx + 1}`;
+    row.appendChild(rankCell);
+
+    // Player with skin
+    const playerCell = document.createElement('td');
+    playerCell.className = 'player-cell';
+    const playerContent = document.createElement('div');
+    playerContent.style.display = 'flex';
+    playerContent.style.alignItems = 'center';
+    playerContent.style.gap = '10px';
+    playerContent.style.cursor = 'pointer';
+    playerContent.onclick = () => showPlayerModal(p);
+
+    const skin = document.createElement('img');
+    skin.src = `https://mc-heads.net/avatar/${p.uuid}`;
+    skin.alt = p.username;
+    skin.className = 'player-head';
+    skin.onerror = () => { skin.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22%3E%3Crect fill=%22%23888%22 width=%2232%22 height=%2232%22/%3E%3C/svg%3E'; };
+
+    const name = document.createElement('span');
+    name.textContent = p.username;
+    name.style.cursor = 'pointer';
+
+    playerContent.appendChild(skin);
+    playerContent.appendChild(name);
+    playerCell.appendChild(playerContent);
+    row.appendChild(playerCell);
+
+    // Tier columns
+    if (gamemode === 'overall') {
+      ['crystal', 'beast', 'diapot', 'nethpot', 'mace', 'uhc', 'sword'].forEach(gm => {
+        const cell = document.createElement('td');
+        cell.className = 'tier-cell';
+        cell.textContent = p.tiers[gm] || '-';
+        row.appendChild(cell);
+      });
+      // Total points
+      const pointsCell = document.createElement('td');
+      pointsCell.className = 'points-cell';
+      pointsCell.textContent = p.totalPoints;
+      row.appendChild(pointsCell);
+    } else {
+      const cell = document.createElement('td');
+      cell.className = 'tier-cell';
+      cell.textContent = p.tiers[gamemode] || '-';
+      row.appendChild(cell);
+    }
+
+    body.appendChild(row);
   });
 }
 
-function setupSearch(allPlayers){
-  const input = document.getElementById('search');
-  input.addEventListener('input', ()=>{
-    const q = input.value.trim().toLowerCase();
-    const filtered = allPlayers.filter(p=>p.username && p.username.toLowerCase().includes(q));
-    renderTable(filtered);
+// Show player modal
+function showPlayerModal(player) {
+  const modal = document.getElementById('playerModal');
+  document.getElementById('modalSkin').src = `https://mc-heads.net/body/${player.uuid}`;
+  document.getElementById('modalSkin').onerror = function() {
+    this.src = 'https://mc-heads.net/avatar/' + player.uuid;
+  };
+  document.getElementById('modalUsername').textContent = player.username;
+  document.getElementById('modalUUID').textContent = `UUID: ${player.uuid}`;
+  document.getElementById('modalPoints').textContent = player.totalPoints;
+
+  const tiersDiv = document.getElementById('modalTiers');
+  tiersDiv.innerHTML = '';
+  ['crystal', 'beast', 'diapot', 'nethpot', 'mace', 'uhc', 'sword'].forEach(gm => {
+    const gm_obj = gamemodes.find(g => g.key === gm);
+    const tier = player.tiers[gm] || 'Not Tested';
+    const tierDiv = document.createElement('div');
+    tierDiv.className = 'modal-tier';
+    tierDiv.textContent = `${gm_obj.emoji} ${gm_obj.label}: ${tier}`;
+    tiersDiv.appendChild(tierDiv);
   });
+
+  modal.style.display = 'block';
 }
 
-async function init(){
-  try{
-    const d = await loadData();
-    const players = Array.isArray(d.players) ? d.players : [];
-    renderStats(d);
-    renderTable(players);
-    setupSearch(players);
-  }catch(err){
-    console.error(err);
-    document.getElementById('stats').textContent = 'Failed to load data.';
-  }
-}
+// Close modal
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById('playerModal');
+  const closeBtn = document.querySelector('.close');
+  
+  closeBtn.onclick = () => {
+    modal.style.display = 'none';
+  };
 
-window.addEventListener('DOMContentLoaded', init);
+  window.onclick = (event) => {
+    if (event.target === modal) {
+      modal.style.display = 'none';
+    }
+  };
+
+  loadData();
+});

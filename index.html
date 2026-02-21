@@ -3,39 +3,61 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Tier Testing Leaderboard</title>
+    <title>Minecraft Tier Testing Leaderboard</title>
     <link rel="stylesheet" href="src/style.css" />
   </head>
   <body>
     <header class="site-header">
-      <h1>Tier Testing Leaderboard</h1>
-      <div id="lastUpdated" class="muted"></div>
+      <div class="header-content">
+        <h1>⚔️ Tier Testing Leaderboard</h1>
+        <div id="lastUpdated" class="muted"></div>
+      </div>
     </header>
 
     <main class="container">
+      <!-- Stats Cards -->
       <section class="stats" id="stats">
         <!-- stats injected here -->
       </section>
 
-      <section class="controls">
-        <input id="search" placeholder="Search username" />
-        <label>Sort:
-          <select id="sortSelect">
-            <option value="username">Username</option>
-          </select>
-        </label>
+      <!-- Gamemode Tabs -->
+      <section class="gamemode-tabs">
+        <div class="tabs" id="gamemodeTabs">
+          <!-- tabs injected here -->
+        </div>
       </section>
 
+      <!-- Leaderboard Table -->
       <section class="table-wrap">
-        <table id="playersTable">
+        <table id="leaderboardTable">
           <thead id="tableHead"></thead>
           <tbody id="tableBody"></tbody>
         </table>
       </section>
     </main>
 
+    <!-- Player Modal -->
+    <div id="playerModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-body">
+          <div class="modal-left">
+            <img id="modalSkin" src="" alt="player skin" />
+          </div>
+          <div class="modal-right">
+            <h2 id="modalUsername"></h2>
+            <p class="modal-uuid" id="modalUUID"></p>
+            <div class="modal-tiers" id="modalTiers"></div>
+            <div class="modal-points">
+              <strong>Total Points: <span id="modalPoints">0</span></strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <footer class="site-footer">
-      <small>Data loaded from <code>data/results.json</code></small>
+      <small>Minecraft Tier Testing Leaderboard</small>
     </footer>
 
     <script src="src/app.js"></script>
