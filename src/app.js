@@ -175,34 +175,50 @@ function renderTable(players) {
     const rank = index + 1;
     const rankEmoji = rank === 1 ? '👑' : rank;
 
-    let playerCellHtml = `
+    const rankTd = document.createElement('td');
+    rankTd.className = 'rank-cell';
+    rankTd.textContent = rankEmoji;
+
+    const playerTd = document.createElement('td');
+    playerTd.className = 'player-td';
+    playerTd.innerHTML = `
       <div class="player-cell" onclick="openPlayerModal('${player.uuid}')">
         <img class="player-avatar" src="https://mc-heads.net/avatar/${player.uuid}" alt="${player.username}" />
         <span class="player-name">${player.username}</span>
       </div>
     `;
 
-    let rowHtml = `<td class="rank-cell">${rankEmoji}</td><td>${playerCellHtml}</td>`;
+    row.appendChild(rankTd);
+    row.appendChild(playerTd);
 
     if (currentGamemode === 'overall') {
       const tiers = player.tiers || {};
       for (const gm of GAMEMODES) {
         const tier = tiers[gm] || 'Untested';
         const tierClass = tier === 'Untested' ? 'tier-empty' : (tier.startsWith('HT') ? 'tier-ht' : 'tier-lt');
-        rowHtml += `<td><span class="tier-badge ${tierClass}">${tier}</span></td>`;
+        const tierTd = document.createElement('td');
+        tierTd.innerHTML = `<span class="tier-badge ${tierClass}">${tier}</span>`;
+        row.appendChild(tierTd);
       }
       const points = calculatePlayerPoints(tiers);
-      rowHtml += `<td class="points-cell">${points}</td>`;
+      const pointsTd = document.createElement('td');
+      pointsTd.className = 'points-cell';
+      pointsTd.textContent = points;
+      row.appendChild(pointsTd);
     } else {
       const tiers = player.tiers || {};
       const tier = tiers[currentGamemode] || 'Untested';
       const tierClass = tier === 'Untested' ? 'tier-empty' : (tier.startsWith('HT') ? 'tier-ht' : 'tier-lt');
-      rowHtml += `<td><span class="tier-badge ${tierClass}">${tier}</span></td>`;
+      const tierTd = document.createElement('td');
+      tierTd.innerHTML = `<span class="tier-badge ${tierClass}">${tier}</span>`;
+      row.appendChild(tierTd);
       const totalPoints = calculatePlayerPoints(tiers);
-      rowHtml += `<td class="points-cell">${totalPoints}</td>`;
+      const pointsTd = document.createElement('td');
+      pointsTd.className = 'points-cell';
+      pointsTd.textContent = totalPoints;
+      row.appendChild(pointsTd);
     }
 
-    row.innerHTML = rowHtml;
     tbody.appendChild(row);
   });
 }

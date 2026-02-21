@@ -231,7 +231,11 @@ html, body {
   cursor: pointer;
   transition: all 0.3s ease;
   width: 100%;
-  min-width: 200px;
+}
+
+.player-td {
+  padding: 14px 16px;
+  vertical-align: middle;
 }
 
 .player-cell:hover {
