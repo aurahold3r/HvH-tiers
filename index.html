@@ -1,86 +1,144 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark" data-view="table">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Minecraft Tier Testing - Leaderboard</title>
+  <title>Tier Vault — Minecraft PvP Grading Archive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="src/style.css" />
 </head>
 <body>
+  <!-- Animated background -->
+  <canvas id="bgCanvas" class="bg-canvas" aria-hidden="true"></canvas>
+
+  <!-- Scroll progress -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
   <!-- Header -->
   <header class="site-header">
-    <div class="header-content">
-      <h1 class="logo">⚔️ Tier Testing</h1>
-      <div id="lastUpdated" class="last-updated"></div>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="crest" aria-hidden="true">
+          <div class="crest-ring"></div>
+          <div class="crest-ring crest-ring--2"></div>
+          <div class="crest-glow"></div>
+          <span class="crest-symbol">◆</span>
+        </div>
+        <div class="brand-text">
+          <h1 class="logo">Tier Vault</h1>
+          <span class="tagline">PvP Grading Archive</span>
+        </div>
+      </div>
+
+      <nav class="header-nav" aria-label="Main navigation">
+        <a href="#" class="nav-link">Archive</a>
+        <a href="#" class="nav-link">Tiers</a>
+        <a href="#" class="nav-link">About</a>
+      </nav>
+
+      <div class="header-actions">
+        <button id="themeToggle" class="icon-btn" title="Toggle theme" aria-label="Toggle dark mode">🌙</button>
+        <button id="viewToggle" class="icon-btn" title="Toggle view mode" aria-label="Toggle table/card view" data-view="table">▧</button>
+        <button id="searchToggle" class="icon-btn" title="Open search" aria-label="Open search">🔍</button>
+      </div>
     </div>
   </header>
 
-  <!-- Main Container -->
-  <main class="container">
-    <!-- Stats Cards -->
-    <section class="stats-container" id="stats"></section>
-
-    <!-- Gamemode Tabs -->
-    <section class="tabs-section">
-      <div class="tabs" id="tabs">
-        <button class="tab-btn active" data-gamemode="overall">📊 Overall</button>
-        <button class="tab-btn" data-gamemode="crystal">🔮 Crystal</button>
-        <button class="tab-btn" data-gamemode="beast">👹 Beast</button>
-        <button class="tab-btn" data-gamemode="diapot">💎 DiaPot</button>
-        <button class="tab-btn" data-gamemode="nethpot">🌋 NethPot</button>
-        <button class="tab-btn" data-gamemode="mace">🔨 Mace</button>
-        <button class="tab-btn" data-gamemode="uhc">⚔️ UHC</button>
-        <button class="tab-btn" data-gamemode="sword">🗡️ Sword</button>
-      </div>
-    </section>
-
-    <!-- Search Bar -->
-    <section class="search-section">
-      <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search player...">
-    </section>
-
-    <!-- Leaderboard Table -->
-    <section class="table-wrap">
-      <table class="leaderboard-table">
-        <thead>
-          <tr id="tableHeader"></tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-      </table>
-    </section>
-
-    <div id="emptyState" class="empty-state" style="display:none;">
-      <p>No players found in this category.</p>
+  <!-- Hero -->
+  <section class="hero reveal">
+    <div class="hero-inner">
+      <div class="hero-badge">LIVE ARCHIVE</div>
+      <h2 class="hero-title">Every rank. <span class="highlight">Every grade.</span></h2>
+      <p class="hero-sub">Track skill across every PvP gamemode. Compare, sort, and inspect player progression in real time.</p>
     </div>
-  </main>
+    <div class="hero-door hero-door--left"></div>
+    <div class="hero-door hero-door--right"></div>
+  </section>
 
-  <!-- Player Modal -->
-  <div id="playerModal" class="modal">
-    <div class="modal-content">
-      <button class="modal-close">&times;</button>
-      <div class="modal-body">
-        <div class="modal-skin">
-          <img id="modalSkinImage" src="" alt="Player Skin" />
+  <!-- Stats -->
+  <section class="stats-section" id="stats">
+    <h2 class="section-title">
+      <span class="section-number">01</span>
+      Archive Overview
+    </h2>
+    <div class="stats-grid" id="statsGrid"></div>
+  </section>
+
+  <!-- Controls -->
+  <section class="controls-section">
+    <div class="controls-inner">
+      <div class="control-group">
+        <div class="gamemode-segmented" id="tabs"></div>
+      </div>
+      <div class="control-group control-group--flex">
+        <div class="search-wrap">
+          <button id="clearSearch" class="search-clear" aria-label="Clear search">✕</button>
+          <input type="text" id="searchInput" class="search-input" placeholder="Search players..." autocomplete="off">
+          <div class="search-hint" id="searchHint">Press <kbd>/</kbd> to focus</div>
         </div>
-        <div class="modal-info">
-          <h2 id="modalUsername"></h2>
-          <p class="modal-uuid" id="modalUUID"></p>
-          <div class="modal-stats">
-            <h3>Tier Ranks</h3>
-            <div class="modal-tiers" id="modalTiers"></div>
-            <div class="modal-points">
-              <strong>Total Points: <span id="modalTotalPoints">0</span></strong>
-            </div>
-          </div>
+        <div class="sort-wrap">
+          <label class="sort-label">Sort by</label>
+          <select id="sortSelect" class="sort-select">
+            <option value="points">Rank (Points)</option>
+            <option value="nameAsc">Name A → Z</option>
+            <option value="nameDesc">Name Z → A</option>
+            <option value="tier">Tier (High → Low)</option>
+          </select>
         </div>
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- Leaderboard -->
+  <section class="leaderboard-section" id="leaderboard">
+    <div class="leaderboard-wrap" id="leaderboardWrap">
+      <div class="table-view" id="tableView">
+        <table class="lb-table">
+          <thead id="tableHeader"></thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+      <div class="card-view hidden" id="cardView"></div>
+    </div>
+    <div id="emptyState" class="empty-state hidden">
+      <div class="empty-icon">◈</div>
+      <h3>No matching records</h3>
+      <p>Try adjusting your search or gamemode filter.</p>
+    </div>
+  </section>
 
   <!-- Footer -->
   <footer class="site-footer">
-    <p>Minecraft Tier Testing Leaderboard</p>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="crest-small" aria-hidden>◆</div>
+        <span>Tier Vault</span>
+      </div>
+      <p class="footer-note">Community-run Minecraft PvP grading archive. Not affiliated with Mojang.</p>
+      <div class="footer-copy">
+        <span id="year"></span> Tier Vault. Built for the grind.
+      </div>
+    </div>
   </footer>
+
+  <!-- Back to top -->
+  <button id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>
+
+  <!-- Toast -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- Player Modal -->
+  <div id="playerModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-panel" id="modalPanel">
+      <button class="modal-close" id="modalClose" aria-label="Close profile">✕</button>
+      <div class="modal-body" id="modalBody">
+        <!-- injected by JS -->
+      </div>
+    </div>
+  </div>
 
   <script src="src/app.js"></script>
 </body>
