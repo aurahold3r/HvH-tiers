@@ -132,9 +132,48 @@
         "beast": "HT4",
         "diapot": "HT3",
         "nethpot": "HT4",
+      "mace": "LT2",
+      "uhc": "HT3",
+      "sword": "HT4"
+      }
+    },
+    {
+      "uuid": "11111111-1111-4111-8111-111111111111",
+      "username": "FakePlayerOne",
+      "tiers": {
+        "crystal": "HT1",
+        "beast": "LT1",
+        "diapot": "HT2",
+        "nethpot": "HT3",
         "mace": "LT2",
-        "uhc": "HT3",
-        "sword": "HT4"
+        "uhc": "HT4",
+        "sword": "LT3"
+      }
+    },
+    {
+      "uuid": "22222222-2222-4222-8222-222222222222",
+      "username": "FakePlayerTwo",
+      "tiers": {
+        "crystal": "LT4",
+        "beast": "HT5",
+        "diapot": "LT5",
+        "nethpot": "HT1",
+        "mace": "HT2",
+        "uhc": "LT1",
+        "sword": "HT3"
+      }
+    },
+    {
+      "uuid": "33333333-3333-4333-8333-333333333333",
+      "username": "FakePlayerThree",
+      "tiers": {
+        "crystal": "HT3",
+        "beast": "LT4",
+        "diapot": "HT4",
+        "nethpot": "LT2",
+        "mace": "HT5",
+        "uhc": "LT5",
+        "sword": "HT1"
       }
     }
   ]
